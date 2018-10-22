@@ -15,22 +15,29 @@ public class MainActivity extends AppCompatActivity implements CreateFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Le Button est dans l'Activity
         addBottleButton= findViewById(R.id.a_main_btn_addB);
 
+        //Creation du fragment d'affichage
         fragmentDisplayCreation();
 
+        //Appuie sur le bouton d'ajout
         addBottleButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //Intent intent = new Intent(MainActivity.this, CreateBottleActivity.class);
-                //startActivityForResult(intent,0);
+                //Masque le bouton pour qu'il ne soit pas sur la prochaine vue, en effet il est dans l'Activity et non
+                //le fragment qui va être écrasé, il sera donc toujours présent, d'ou l'importance de le masquer
                 addBottleButton.setVisibility(View.GONE);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                CreateFragment fragment = new CreateFragment();
-                fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.commit();
+                fragmentCreateCreation();
             }
         });
+    }
+
+    protected void fragmentCreateCreation() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        CreateFragment fragment = new CreateFragment();
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -40,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements CreateFragment.On
             Bottle createdBottle ;
             createdBottle = (Bottle) data.getSerializableExtra("bottle");
             cave.addBottle(createdBottle);
-            //adapter.notifyItemInserted(cave.getNumberOfBottles());
             fragmentDisplayCreation();
 
         }
